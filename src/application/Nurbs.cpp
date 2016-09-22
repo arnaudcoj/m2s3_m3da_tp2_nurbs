@@ -1,6 +1,7 @@
 #include "Nurbs.h"
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
 #include "Vector3.h"
 #include "Matrix4.h"
@@ -43,7 +44,7 @@ void Nurbs::knotUniform(EDirection direction,int nb) {
    *
    *
    */
-  double step = 1. / double(nb -1); // -1 car on permet d'avoir la valeur 1 dans le tableau
+  double step = 1. / double(nb -1); // -1 car permet d'avoir la valeur 1 dans le tableau
   double cpt = 0.;
   for(int i = 0; i < nb; i++) {
     _knot[direction][i] = cpt;
@@ -62,6 +63,18 @@ double Nurbs::evalNkp(int k,int p,double u,std::vector<double> &knot) {
    * - k : indice of the basis function.
    */
 
+  if(p == 0) {
+    auto it = find(knot.begin(), knot.end(), u);
+    int i = distance(knot.begin(), it);
+
+    if(i >= k && i <= k + 1) {
+      result = 1.;
+    } else {
+      result = 0;
+    }
+  } else {
+    result = (u - knot[k]) / (knot[k + p] - knot[k]) * evalNkp(k, p -1, u, knot) + (knot[p + k + 1] - u) / (knot[k + p + 1] - knot[k + 1]) * evalNkp(k + 1, p - 1, u, knot);
+  }
 
   return result;
 }
