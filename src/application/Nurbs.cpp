@@ -43,6 +43,12 @@ void Nurbs::knotUniform(EDirection direction,int nb) {
    *
    *
    */
+  double step = 1. / double(nb -1); // -1 car on permet d'avoir la valeur 1 dans le tableau
+  double cpt = 0.;
+  for(int i = 0; i < nb; i++) {
+    _knot[direction][i] = cpt;
+    cpt += step;
+  }
 
 }
 
