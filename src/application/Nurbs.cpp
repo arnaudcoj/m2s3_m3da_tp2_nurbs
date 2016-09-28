@@ -126,6 +126,14 @@ Vector3 Nurbs::pointCurve(double u) {
  * - evalNkp(D_U,k,p,u) to eval basis function
  */
 
+  int n = nbControl(D_U);
+  int p = degree(D_U);
+
+  for(int k = 0; k < n; k++) {
+    Vector4 pk = control(k);
+    result += evalNkp(D_U, k, p, u) * pk;
+  }
+
   return Vector3(result.x(),result.y(),result.z());
 }
 
