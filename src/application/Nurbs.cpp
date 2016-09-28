@@ -64,10 +64,8 @@ double Nurbs::evalNkp(int k,int p,double u,std::vector<double> &knot) {
    */
 
   if(p == 0) {
-    auto it = find(knot.begin(), knot.end(), u);
-    int i = distance(knot.begin(), it);
 
-    if(i >= k && i <= k + 1) {
+    if(u >= knot[k] && u < knot[k + 1]) {
       result = 1.;
     } else {
       result = 0;

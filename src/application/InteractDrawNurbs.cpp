@@ -382,15 +382,26 @@ void InteractDrawNurbs::drawBasis()
       toDraw.clear();
       p3d::ambientColor=_basisColor[k%30]; // color of the drawn basis curve
       p3d::shaderVertexAmbient();
-      /* TODO : compute each point of the array toDraw
+      /* Q3 : compute each point of the array toDraw
        * - loop to set each point in toDraw (toDraw.push_back(Vector3(u,Nkp,0)),
        * - number of points to set : nbPoint
        * - _nurbs->evalNkp(direction,k,d,u) is the value of the basis function (degree d) for the parameter u
        * - the basis function is non-zero in the interval [??,??] (you have to determine the interval)
        *
        */
+      double d = _nurbs->degree(direction);
 
-      // end TODO
+      double up = _nurbs->knot(direction, k);
+      double unp1 = _nurbs->knot(direction, k +  d + 1);
+
+
+      for(int i = 0; i < nbPoint ; i++) {
+        double t = (double(i) / double(nbPoint));
+        double u = t* (unp1 - up) + up;
+        double Nkp = _nurbs->evalNkp(direction, k, d, u);
+        toDraw.push_back(Vector3(u, Nkp, 0));
+      }
+
 
       // draw the resulting line strip :
       p3d::drawLineStrip(toDraw);
