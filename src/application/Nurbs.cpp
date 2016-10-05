@@ -138,7 +138,24 @@ Vector3 Nurbs::pointCurve(double u) {
 Vector3 Nurbs::pointSurface(double u,double v) {
   Vector4 result(0,0,0,0);
 
-  return result.project(); // divide by w
+  int nu = nbControl(D_U);
+  int nv = nbControl(D_V);
+
+  int pu = degree(D_U);
+  int pv = degree(D_V);
+
+  for(int l = 0; l < nv; l++) {
+    Vector4 ppl(0.,0.,0.,0.);
+
+    for(int k = 0; k < nu; k++) {
+      Vector4 pkl = control(k, l);
+      ppl += evalNkp(D_U, k, pu, u) * pkl;
+    }
+
+    result += evalNkp(D_V, l, pv, v) * ppl;
+  }
+
+  return result.project() / result.w();
 }
 
 
