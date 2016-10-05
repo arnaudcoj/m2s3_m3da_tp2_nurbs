@@ -66,7 +66,15 @@ double Nurbs::evalNkp(int k,int p,double u,std::vector<double> &knot) {
       result = 0;
     }
   } else {
-    result = (u - knot[k]) / (knot[k + p] - knot[k]) * evalNkp(k, p -1, u, knot) + (knot[p + k + 1] - u) / (knot[k + p + 1] - knot[k + 1]) * evalNkp(k + 1, p - 1, u, knot);
+    double uk = knot[k];
+    double ukp = knot[k + p];
+    double upk1 = knot[p + k + 1];
+    double uk1 = knot[k + 1];
+
+    if((ukp - uk) == 0 || (upk1 - uk1) == 0)
+      return 0.;
+
+    result = (u - uk) / (ukp - uk) * evalNkp(k, p -1, u, knot) + (upk1 - u) / (upk1 - uk1) * evalNkp(k + 1, p - 1, u, knot);
   }
 
   return result;
@@ -155,24 +163,28 @@ void Nurbs::knotOpenUniform(EDirection direction) {
   int nb = nbControl(direction);
   int deg = degree(direction);
 
-  double step = 1. / (nb - 1);
+  double step = 1. / (nb - deg - 1);
 
   _knot[direction].resize(nb+deg+1);
 
-  int k;
+  int k = 0;
 
-  for(k = 0; k < deg; k++) {
+  for(int i = 0; i < deg + 1; i++, k++) {
     _knot[direction][k] = 0.;
   }
 
-  for(int i = 1; i < nbControl(direction) - 1; i++, k++) {
+  for(int i = 1; i < nb - deg - 1; i++, k++) {
     _knot[direction][k] = i * step;
   }
 
-  for(; k < nb + deg; k++) {
+  for(int i = 0; i < deg + 1; i++, k++) {
     _knot[direction][k] = 1.;
   }
 
+  for(k = 0; k < nb + deg; k++) {
+    cout << _knot[direction][k] << " ";
+  }
+  cout << endl;
 }
 
 
@@ -183,6 +195,28 @@ void Nurbs::knotBezier(EDirection direction) {
    *
    *
    */
+  int nb = nbControl(direction);
+  int deg = nbControl(direction)-1;
+
+  double step = 1. / (nb - 1);
+
+  _knot[direction].resize(nb+deg+1);
+
+  int k;
+
+  for(k = 0; k < deg + 1; k++) {
+    _knot[direction][k] = 0.;
+  }
+
+  for(int i = 1; i < nbControl(direction) - 1; i++, k++) {
+    _knot[direction][k] = i * step;
+  }
+
+  for(; k < nb + deg + 1; k++) {
+    _knot[direction][k] = 1.;
+  }
+
+
 
 }
 
