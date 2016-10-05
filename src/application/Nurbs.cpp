@@ -192,7 +192,7 @@ void Nurbs::knotOpenUniform(EDirection direction) {
 
 void Nurbs::knotBezier(EDirection direction) {
   int nb = nbControl(direction);
-  degree(direction, nb - 1);
+  _degree[direction] = nb - 1;
 
   int deg = degree(direction);
 
@@ -219,6 +219,20 @@ void Nurbs::setCircle() {
    *
    */
   _control.clear();
+  _nbControl[D_U] = 7;
+
+  /* p0 */ _control.push_back(Vector4( 0., 0.,  0.,  1.));
+  /* p1 */ _control.push_back(Vector4(-1., 0.,  0., 0.5 /*cos 60°*/));
+  /* p2 */ _control.push_back(Vector4(-1., 1.,  0.,  1.));
+  /* p3 */ _control.push_back(Vector4( 0., 1.,  0., 0.5));
+  /* p4 */ _control.push_back(Vector4( 1., 1.,  0.,  1.));
+  /* p5 */ _control.push_back(Vector4( 1., 0.,  0., 0.5));
+  /* p6 */ _control.push_back(_control[0]);
+
+  _degree[D_U] = 2;
+
+  double step = 1./3.;
+  _knot[D_U] = {0.,0.,0.,step,step,2*step,2*step,3.,3.,3.};
 
 }
 
