@@ -181,44 +181,37 @@ void Nurbs::knotOpenUniform(EDirection direction) {
     _knot[direction][k] = 1.;
   }
 
-  cout << nb << " " << deg << " " << k - 1 << " " << step << endl;
+  /*cout << nb << " " << deg << " " << k - 1 << " " << step << endl;
   for(k = 0; k < nb + deg + 1; k++) {
     cout << _knot[direction][k] << " ";
   }
   cout << endl;
+  */
 }
 
 
 void Nurbs::knotBezier(EDirection direction) {
-
-  /* TODO : define a bezier curve : degree = nbControl-1,
-   *
-   *
-   *
-   */
   int nb = nbControl(direction);
-  int deg = nbControl(direction)-1;
+  degree(direction, nb - 1);
 
-  double step = 1. / (nb - 1);
+  int deg = degree(direction);
 
-  _knot[direction].resize(nb+deg+1);
+  _knot[direction].resize(nb + deg + 1);
 
-  int k;
+  int k = 0;
 
-  for(k = 0; k < deg + 1; k++) {
+  for(int i = 0; i < deg +1; i++, k++) {
     _knot[direction][k] = 0.;
   }
-
-  for(int i = 1; i < nbControl(direction) - 1; i++, k++) {
-    _knot[direction][k] = i * step;
-  }
-
-  for(; k < nb + deg + 1; k++) {
+  for(int i = 0; i < deg +1; i++, k++) {
     _knot[direction][k] = 1.;
   }
 
-
-
+  /*cout << nb << " " << deg << " " << k << " " << endl;
+  for(k = 0; k < nb + deg + 1; k++) {
+    cout << _knot[direction][k] << " ";
+  }
+  cout << endl;*/
 }
 
 void Nurbs::setCircle() {
