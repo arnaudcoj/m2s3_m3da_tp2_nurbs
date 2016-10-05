@@ -131,7 +131,7 @@ Vector3 Nurbs::pointCurve(double u) {
     result += evalNkp(D_U, k, p, u) * pk;
   }
 
-  return Vector3(result.x(),result.y(),result.z());
+  return Vector3(result.x(),result.y(),result.z()) / result.w();
 }
 
 
