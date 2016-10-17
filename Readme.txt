@@ -1,6 +1,5 @@
 Cojez Arnaud
 
-Doit contenir :
-- ce que vous n'avez pas fait (et pourquoi).
-- difficultés rencontrées.
-- commentaires éventuels sur le TP (points à éclaircir, longueur du sujet, etc). 
+Tout a été fait
+
+J'ai eu du mal à comprendre le principe de Splines, NURBS etc. Jusqu'à ce que le professeur m'explique.
